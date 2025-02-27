@@ -4,13 +4,13 @@
 from configs import Config
 from pyrogram import Client, filters, idle
 from pyrogram.errors import QueryIdInvalid
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InlineQuery, InlineQueryResultArticle,InputTextMessageContent
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InlineQuery, InlineQueryResultArticle, InputTextMessageContent
 from LazyDeveloper.forcesub import ForceSub
 import asyncio
 
 # Bot Client for Inline Search
 Bot = Client(
-    session_name=Config.BOT_SESSION_NAME,
+    "bot_session",  # "session_name" সরিয়ে নাম দিতে হবে
     api_id=Config.API_ID,
     api_hash=Config.API_HASH,
     bot_token=Config.BOT_TOKEN
@@ -18,11 +18,11 @@ Bot = Client(
 
 # User Client for Searching in Channel.
 User = Client(
-    session_name=Config.USER_SESSION_STRING,
+    "user_session",  # "session_name" সরিয়ে নাম দিতে হবে
     api_id=Config.API_ID,
-    api_hash=Config.API_HASH
+    api_hash=Config.API_HASH,
+    session_string=Config.USER_SESSION_STRING  # session_string আলাদা ভাবে দিতে হবে
 )
-
 @Bot.on_message(filters.private & filters.command("start"))
 async def start_handler(_, event: Message):
 	await event.reply_photo("https://telegra.ph/file/2b160d9765fe080c704d2.png",
