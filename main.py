@@ -10,19 +10,19 @@ import asyncio
 
 # Bot Client for Inline Search
 Bot = Client(
-    "bot_session",  # "session_name" সরিয়ে নাম দিতে হবে
+    "PrimeBotz",  
     api_id=Config.API_ID,
     api_hash=Config.API_HASH,
     bot_token=Config.BOT_TOKEN
 )
 
-# User Client for Searching in Channel.
 User = Client(
-    "user_session",  # "session_name" সরিয়ে নাম দিতে হবে
+    "UserSession",  
     api_id=Config.API_ID,
     api_hash=Config.API_HASH,
-    session_string=Config.USER_SESSION_STRING  # session_string আলাদা ভাবে দিতে হবে
+    session_string=Config.USER_SESSION_STRING
 )
+
 @Bot.on_message(filters.private & filters.command("start"))
 async def start_handler(_, event: Message):
 	await event.reply_photo("https://telegra.ph/file/2b160d9765fe080c704d2.png",
