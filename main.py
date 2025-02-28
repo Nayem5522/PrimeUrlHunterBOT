@@ -64,8 +64,14 @@ async def inline_handlers(bot, message: Message):
             found = True  
             f_text = msg.text.split("\n", 1)[0]
             d_link = msg.text.split("\n", 2)[-1]
-            answers += f'**▰▱▰▱▰▱▰▱▰▱▰▱▰▱\n📜 𝗙𝗶𝗹𝗲 𝗡𝗮𝗺𝗲: {f_text}\n🔗 𝗟𝗶𝗻𝗸s: 👇👇\n {d_link}\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱**\n\n❗️❗️❗️ ɪᴍᴘᴏʀᴛᴀɴᴛ ɴᴏᴛɪᴄᴇ ❗️❗️❗️\n⋆★⋆━━━━━━★━━━━⋆★⋆\nLink will auto-delete in 3 minutes... ⏰ \n⋆★⋆━━━━━━★━━━━⋆★⋆\n\n'
+            answers += f'**▰▱▰▱▰▱▰▱▰▱▰▱▰▱\n📜 𝗙𝗶𝗹𝗲 𝗡𝗮𝗺𝗲: {f_text}\n🔗 𝗟𝗶𝗻𝗸: 👇👇\n {d_link}\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱**\n\n'
 
+    if found:
+        # ****
+        answers += '''❗️❗️❗️ ɪᴍᴘᴏʀᴛᴀɴᴛ ɴᴏᴛɪᴄᴇ ❗️❗️❗️\n⋆★⋆━━━━━━★━━━━⋆★⋆\nLink will auto-delete in 3 minutes... ⏰ \n⋆★⋆━━━━━━★━━━━⋆★⋆\n
+'''
+
+    await message.reply_text(answers)
     if not found:
         google_search_url = f"https://www.google.com/search?q={urllib.parse.quote(message.text)}"
         answers = f"**❌ No results found for ➠ {message.text}\n\n⚡ Try searching with correct spelling or add the release year.\n\n🔍 Check Google for correct spelling 👇**"
