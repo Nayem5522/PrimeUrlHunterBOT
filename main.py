@@ -40,26 +40,45 @@ async def help_handler(_, event: Message):
         ])
     )
 
-@Bot.on_message(filters.incoming & ~filters.channel)
-async def inline_handlers(_, event: Message):
-    if event.text == '/start':
-        return
-    answers = f'**📂 🔍 ʜᴇʀᴇ ɪꜱ ʏᴏᴜʀ ꜱᴇᴀʀᴄʜ 🔎 ➠ {event.text} \n ⚡ ᴘᴏᴡᴇʀᴇᴅ ʙʏ : @Prime_Botz\n⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟤\n🔊\n➠ Type Only Movie Name With Correct Spelling. Dont type Bhejo, Bhej Do, send me etc...✍️\n➠ Add Year For Better Result.\n\n🗓️\n⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟤\n\n**'
-    async for message in User.search_messages(chat_id=Config.CHANNEL_ID, limit=50, query=event.text):
-        if message.text:
-            thumb = None
-            f_text = message.text
-            msg_text = message.text.html
-            if "|||" in message.text:
-                f_text = message.text.split("|||", 1)[0]
-                msg_text = message.text.html.split("|||", 1)[0]
-            answers += f'**🎞 Movie Title ➠ ' + '' + f_text.split("\n", 1)[0] + '' + '\n\n📜 Download URLs ➠ ' + '' + f_text.split("\n", 2)[-1] + ' \n\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱\nLink Will Auto Delete In 35Sec...⏰\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱\n\n**'
-    try:
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+import urllib.parse
+
+@Bot.on_message(filters.incoming & ~filters.channel)  
+async def inline_handlers(_, event: Message):  
+    if event.text == '/start':  
+        return  
+
+    # Default response message
+    answers = f'**📂 🔍 ʜᴇʀᴇ ɪꜱ ʏᴏᴜʀ ꜱᴇᴀʀᴄʜ 🔎 ➠ {event.text} \n ⚡ ᴘᴏᴡᴇʀᴇᴅ ʙʏ : @Prime_Botz\n⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟤\n🔊\n➠ Type Only Movie Name With Correct Spelling. Dont type Bhejo, Bhej Do, send me etc...✍️\n➠ Add Year For Better Result.\n\n🗓️\n⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟥⟤\n\n**'  
+
+    found = False  # লিংক পাওয়া গেছে কিনা চেক করার জন্য ফ্ল্যাগ
+
+    async for message in User.search_messages(chat_id=Config.CHANNEL_ID, limit=50, query=event.text):  
+        if message.text:  
+            found = True  # লিংক পাওয়া গেছে
+            f_text = message.text  
+            msg_text = message.text.html  
+            if "|||" in message.text:  
+                f_text = message.text.split("|||", 1)[0]  
+                msg_text = message.text.html.split("|||", 1)[0]  
+            answers += f'**🎞 Movie Title ➠ ' + '' + f_text.split("\n", 1)[0] + '' + '\n\n📜 Download URLs ➠ ' + '' + f_text.split("\n", 2)[-1] + ' \n\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱\nLink Will Auto Delete In 35Sec...⏰\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱\n\n**'  
+
+    if not found:
+        google_search_url = f"https://www.google.com/search?q={urllib.parse.quote(event.text)}"
+        answers = f"**❌ ɴᴏ ʀᴇꜱᴜʟᴛꜱ ꜰᴏᴜɴᴅ ꜰᴏʀ ➠ {event.text}\n\n⚡ ᴛʀʏ ꜱᴇᴀʀᴄʜɪɴɢ ᴡɪᴛʜ ᴄᴏʀʀᴇᴄᴛ ꜱᴘᴇʟʟɪɴɢ ᴏʀ ᴀᴅᴅ ᴛʜᴇ ʀᴇʟᴇᴀꜱᴇ ʏᴇᴀʀ ꜰᴏʀ ʙᴇᴛᴛᴇʀ ʀᴇꜱᴜʟᴛꜱ .\n\n🔍 ᴀɴᴅ ʏᴏᴜ ᴄᴀɴ ᴄʜᴇᴄᴋ ᴛʜᴇ ᴄᴏʀʀᴇᴄᴛ ꜱᴘᴇʟʟɪɴɢ ᴏɴ ɢᴏᴏɢʟᴇ. 👇\n\n📩 ɪꜰ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴍᴀᴋᴇ ᴀ ʀᴇǫᴜᴇꜱᴛ ᴛᴏ ᴛʜᴇ ᴅɪʀᴇᴄᴛ ᴀᴅᴍɪɴ, ʏᴏᴜ ᴄᴀɴ ᴅᴏ ᴛʜᴀᴛ ꜰʀᴏᴍ ʙᴇʟᴏᴡ 👇 ʙᴜᴛᴛᴏɴ.**"
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton("🔍 ᴄʜᴇᴄᴋ ᴛʜᴇ ᴄᴏʀʀᴇᴄᴛ ꜱᴘᴇʟʟɪɴɢ ᴏɴ ɢᴏᴏɢʟᴇ 🔍", url=google_search_url)],
+            [InlineKeyboardButton("📩 ʀᴇǫᴜᴇꜱᴛ ᴅɪʀᴇᴄᴛʟʏ ᴛᴏ ᴛʜᴇ ᴀᴅᴍɪɴ 📩", url="https://t.me/Prime_Admin_Support_ProBot")]
+        ])
+        msg = await event.reply_text(answers, reply_markup=keyboard)
+    else:
         msg = await event.reply_text(answers)
-        await asyncio.sleep(35)
-        await event.delete()
-        await msg.delete()
-    except:
+
+    try:  
+        await asyncio.sleep(35)  
+        await event.delete()  
+        await msg.delete()  
+    except:  
         print(f"[{Config.BOT_SESSION_NAME}] - Failed to Answer - {event.from_user.first_name}")
 
 
