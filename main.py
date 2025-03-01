@@ -51,20 +51,17 @@ async def help_handler(bot, message: Message):
     await message.reply_text(
         Config.ABOUT_HELP_TEXT.format(message.from_user.mention),
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("〄 ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 〄", url="https://t.me/Prime_Botz"),
+            [InlineKeyboardButton("〄 ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇল 〄", url="https://t.me/Prime_Botz"),
              InlineKeyboardButton("✪ ꜱᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ ✪", url="https://t.me/Prime_Botz_support")],
             [InlineKeyboardButton("〆 ᴀʙᴏᴜᴛ 〆", callback_data="About_msg")]
         ]),
-        parse_mode=ParseMode.HTML  # Fixed parse mode
+        parse_mode=ParseMode.HTML  
     )
-             
-             
-@Bot.on_message(filters.incoming & ~filters.channel)
-async def inline_handlers(bot, message: Message):
-    if message.text == '/start':  
-        return  
 
-    
+# Inline Handler (search functionality)
+# এখন এটি শুধুমাত্র সেই মেসেজগুলো প্রসেস করবে যা কমান্ড নয়
+@Bot.on_message(filters.incoming & ~filters.channel & ~filters.command(["start", "help", "broadcast_prime"]))
+async def inline_handlers(bot, message: Message):
     sticker_msg = await message.reply_sticker(PRIME_BOTZ_STIK)
     await asyncio.sleep(3)
     await sticker_msg.delete()
@@ -79,6 +76,7 @@ async def inline_handlers(bot, message: Message):
             d_link = msg.text.split("\n", 2)[-1]
             answers += f'''**▰▱▰▱▰▱▰▱▰▱▰▱▰▱
 📜 𝗙𝗶𝗹𝗲 𝗡𝗮𝗺𝗲: {f_text}
+
 🔗 𝗟𝗶𝗻𝗸: 👇
 {d_link}
 ▰▱▰▱▰▱▰▱▰▱▰▱▰▱**\n\n'''
@@ -99,14 +97,12 @@ async def inline_handlers(bot, message: Message):
             reply_markup=keyboard
         )
 
-
     try:  
         await asyncio.sleep(180)
         await msg.delete()
         await message.delete()
-    except:  
+    except Exception:
         print(f"[{Config.BOT_SESSION_NAME}] - Failed to delete message for {message.from_user.first_name}")
-
 
 # Callback Query Handler
 @Bot.on_callback_query()
@@ -117,11 +113,11 @@ async def button(bot, cmd: CallbackQuery):
             text=Config.ABOUT_BOT_TEXT,
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("〄 ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 〄", url="https://t.me/Prime_Botz")],
+                [InlineKeyboardButton("〄 ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇল 〄", url="https://t.me/Prime_Botz")],
                 [InlineKeyboardButton("✧ ᴀᴅᴍɪɴ ꜱᴜᴘᴘᴏʀᴛ ✧", url="https://t.me/Prime_Nayem"),
                  InlineKeyboardButton("🏠 ʜᴏᴍᴇ 🏠", callback_data="gohome")]
             ]),
-            parse_mode=ParseMode.HTML  # Fixed parse mode
+            parse_mode=ParseMode.HTML  
         )
     elif "Help_msg" in cb_data:
         await cmd.message.edit(
@@ -129,11 +125,11 @@ async def button(bot, cmd: CallbackQuery):
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton("✪ ꜱᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ ✪", url="https://t.me/Prime_Botz_support"),
-                 InlineKeyboardButton("〄 ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 〄", url="https://t.me/Prime_Botz")],
+                 InlineKeyboardButton("〄 ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇল 〄", url="https://t.me/Prime_Botz")],
                 [InlineKeyboardButton("✧ ᴀᴅᴍɪɴ ꜱᴜᴘᴘᴏʀᴛ ✧", url="https://t.me/Prime_Nayem"),
                  InlineKeyboardButton("🏠 ʜᴏᴍᴇ 🏠", callback_data="gohome")]
             ]),
-            parse_mode=ParseMode.HTML  # Fixed parse mode
+            parse_mode=ParseMode.HTML  
         )
     elif "gohome" in cb_data:
         await cmd.message.edit(
@@ -149,6 +145,39 @@ async def button(bot, cmd: CallbackQuery):
                 [InlineKeyboardButton("✧ ᴄʀᴇᴀᴛᴏʀ ✧", url="https://t.me/Prime_Nayem")]
             ]),
             parse_mode=ParseMode.HTML  
+        )
+
+# Broadcast Command (BOT_OWNER only)
+@Bot.on_message(filters.user(Config.BOT_OWNER) & filters.command("broadcast_prime"))
+async def broadcast_prime(bot: Client, message: Message):
+    if not message.reply_to_message:
+        return await message.reply_text("**⚠️ দয়া করে কোনো মেসেজ রিপ্লাই করে ব্রডকাস্ট কমান্ড দিন!**")
+    
+    broadcast_msg = message.reply_to_message
+    sent = 0
+    failed = 0
+    all_users = []
+
+    # শুধুমাত্র প্রাইভেট চ্যাট থেকে ইউজার আইডি সংগ্রহ
+    async for dialog in bot.get_dialogs():
+        if dialog.chat.type == "private":
+            all_users.append(dialog.chat.id)
+
+    # ব্রডকাস্ট প্রক্রিয়া
+    for user_id in all_users:
+        try:
+            await bot.copy_message(
+                chat_id=user_id,
+                from_chat_id=broadcast_msg.chat.id,
+                message_id=broadcast_msg.id
+            )
+            sent += 1
+            await asyncio.sleep(0.2)  # Flood limit এড়াতে বিরতি
+        except Exception:
+            failed += 1  
+
+    await message.reply_text(
+        f"✅ **ব্রডকাস্ট সম্পন্ন ✅**\n\n📤 সফল: {sent} জন\n❌ ব্যর্থ: {failed} জন"
     )
 
 # Start Clients
