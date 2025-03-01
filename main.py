@@ -24,6 +24,9 @@ User = Client(
     session_string=Config.USER_SESSION_STRING
 )
 
+PRIME_BOTZ_STIK = "CAACAgUAAxkBAAI9pmfCrCQ2pNi_3CtnMCUPrty_RQ82AAJIFwAC1BkYVqY09g5jKSm5HgQ"  
+PRIME_BOTZ_NO = "https://envs.sh/iJJ.jpg"
+
 # Start Command
 @Bot.on_message(filters.private & filters.command("start"))
 async def start_handler(bot, message: Message):
@@ -54,12 +57,17 @@ async def help_handler(bot, message: Message):
         ]),
         parse_mode=ParseMode.HTML  # Fixed parse mode
     )
-
-# Inline Search
+             
+             
 @Bot.on_message(filters.incoming & ~filters.channel)
 async def inline_handlers(bot, message: Message):
     if message.text == '/start':  
         return  
+
+    
+    sticker_msg = await message.reply_sticker(PRIME_BOTZ_STIK)
+    await asyncio.sleep(3)
+    await sticker_msg.delete()
 
     answers = f'**📂 🔍 ʜᴇʀᴇ ɪꜱ ʏᴏᴜʀ ꜱᴇᴀʀᴄʜ 🔎 ➠ {message.text}**\n\n'
     found = False
@@ -76,18 +84,21 @@ async def inline_handlers(bot, message: Message):
 ▰▱▰▱▰▱▰▱▰▱▰▱▰▱**\n\n'''
 
     if found:
-        answers += '''❗️❗️❗️ ɪᴍᴘᴏʀᴛᴀɴᴛ ɴᴏᴛɪᴄᴇ ❗️❗️❗️\n⚠️ Link will auto-delete in 3 minutes... ⏰'''
-
+        answers += '''\n\n\n⋆★⋆━━━━━━★━━━━⋆★⋆\n❗️❗️❗️ ɪᴍᴘᴏʀᴛᴀɴᴛ ɴᴏᴛɪᴄᴇ ❗️❗️❗️\n⚠️ Link will auto-delete in 3 minutes... ⏰\n⋆★⋆━━━━━━★━━━━⋆★⋆'''
+        msg = await message.reply_text(answers)
     else:
         google_search_url = f"https://www.google.com/search?q={urllib.parse.quote(message.text)}"
-        answers = f"**❌ No results found for ➠ {message.text}\n\n⚡ Try searching with correct spelling or add the release year.\n\n🔍 Check Google for correct spelling 👇**"
         keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("🔍 Check on Google", url=google_search_url)],
             [InlineKeyboardButton("📩 Request to Admin", url="https://t.me/Prime_Admin_Support_ProBot")]
         ])
 
-    # একবারই মেসেজ পাঠানো হবে  
-    msg = await message.reply_text(answers, reply_markup=keyboard if not found else None)
+        msg = await message.reply_photo(
+            photo=PRIME_BOTZ_NO,
+            caption=f"**❌ No results found for ➠ {message.text}\n\n⚡ Try searching with correct spelling or add the release year.**",
+            reply_markup=keyboard
+        )
+
 
     try:  
         await asyncio.sleep(180)
