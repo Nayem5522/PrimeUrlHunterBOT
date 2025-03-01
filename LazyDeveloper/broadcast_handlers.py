@@ -1,4 +1,3 @@
-
 import asyncio
 import datetime
 import logging
@@ -21,13 +20,15 @@ broadcast_ids = {}
 
 @Client.on_message(filters.command("broadcast") & filters.private & filters.user(Config.OWNER_ID))
 async def broadcast_handler(c: Client, m: Message):
-    if m.reply_to_message:
-        try:
-            await main_broadcast_handler(m)
-        except Exception:
-            logging.error("Error during broadcast", exc_info=True)
-    else:
-        await m.reply_text("Please reply to a message to broadcast.")
+    if not m.reply_to_message:
+        await m.reply_text("❌ Please reply to a message to broadcast.")
+        return
+    
+    try:
+        await main_broadcast_handler(m)
+    except Exception as e:
+        logging.error("Error during broadcast", exc_info=True)
+        await m.reply_text("⚠️ An error occurred while broadcasting. Check logs.")
 
 async def send_msg(user_id, message):
     try:
@@ -37,15 +38,11 @@ async def send_msg(user_id, message):
             await message.forward(chat_id=user_id)
         return 200, None
     except FloodWait as e:
-        await asyncio.sleep(e.value)  # Wait for the required time
+        await asyncio.sleep(e.value)  # Wait to avoid flood limit
         return await send_msg(user_id, message)
-    except InputUserDeactivated:
-        return 400, f"{user_id} : deactivated\n"
-    except UserIsBlocked:
-        return 400, f"{user_id} : blocked the bot\n"
-    except PeerIdInvalid:
-        return 400, f"{user_id} : invalid user id\n"
-    except Exception:
+    except (InputUserDeactivated, UserIsBlocked, PeerIdInvalid) as e:
+        return 400, f"{user_id} : {str(e)}\n"
+    except Exception as e:
         return 500, f"{user_id} : {traceback.format_exc()}\n"
 
 async def main_broadcast_handler(m: Message):
@@ -56,7 +53,7 @@ async def main_broadcast_handler(m: Message):
     while broadcast_id in broadcast_ids:
         broadcast_id = ''.join(random.choices(string.ascii_letters, k=3))
 
-    out = await m.reply_text("Broadcasting started...")
+    out = await m.reply_text("🚀 **Broadcasting started...**")
 
     start_time = time.time()
     total_users = await total_users_count()
@@ -73,8 +70,8 @@ async def main_broadcast_handler(m: Message):
                 success += 1
             else:
                 failed += 1
-            if sts == 400:
-                await delete_user(user['user_id'])
+                if sts == 400:
+                    await delete_user(user['user_id'])
             done += 1
             if broadcast_ids.get(broadcast_id) is None:
                 break
@@ -85,7 +82,14 @@ async def main_broadcast_handler(m: Message):
     await asyncio.sleep(3)
     await out.delete()
 
-    report_text = f"Broadcast completed in `{completed_in}`\n\nTotal users: {total_users}.\nProcessed: {done}, Success: {success}, Failed: {failed}."
+    report_text = (
+        f"✅ **Broadcast Completed!**\n\n"
+        f"⏳ Time Taken: `{completed_in}`\n"
+        f"👥 Total Users: `{total_users}`\n"
+        f"📩 Processed: `{done}`\n"
+        f"✅ Success: `{success}`\n"
+        f"❌ Failed: `{failed}`"
+    )
     
     if failed == 0:
         await m.reply_text(report_text, quote=True)
@@ -93,4 +97,4 @@ async def main_broadcast_handler(m: Message):
         await m.reply_document(document='broadcast.txt', caption=report_text, quote=True)
 
     await aiofiles.os.remove('broadcast.txt')
-  
+    
