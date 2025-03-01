@@ -57,8 +57,8 @@ async def ForceSub(bot: Client, cmd: Message):
     except Exception as e:
         await bot.send_message(
             chat_id=cmd.from_user.id,
-            text="⚠️ ʟᴏᴏᴋs ʟɪᴋᴇ ʏᴏᴜ ᴛʜɪɴᴋ ʏᴏᴜ'ʀᴇ ǫᴜɪᴛᴇ sᴍᴀʀᴛ.  
-ᴅᴏɴ'ᴛ ᴛʀʏ ᴛᴏ ᴀᴄᴛ ᴛᴏᴏ ᴄʟᴇᴠᴇʀ ᴡɪᴛʜ ᴍᴇ.😂.\n"
+            text="⚠️ ʟᴏᴏᴋs ʟɪᴋᴇ ʏᴏᴜ ᴛʜɪɴᴋ ʏᴏᴜ ᴀʀᴇ ǫᴜɪᴛᴇ sᴍᴀʀᴛ.  
+ᴅᴏɴ ɴᴏᴛ ᴛʀʏ ᴛᴏ ᴀᴄᴛ ᴛᴏᴏ ᴄʟᴇᴠᴇʀ ᴡɪᴛʜ ᴍᴇ.😂.\n"
                  "»» ғɪʀsᴛ, ᴊᴏɪɴ ᴛʜᴇ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ, ᴛʜᴇɴ ᴄʟɪᴄᴋ ᴛʜᴇ ʀᴇғʀᴇsʜ ʙᴜᴛᴛᴏɴ 🔄 .",
             parse_mode=enums.ParseMode.MARKDOWN,
             disable_web_page_preview=True,
