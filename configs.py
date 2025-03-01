@@ -47,32 +47,29 @@ class Config(object):
 """
 
     HOME_TEXT = """
-<b>Hello Baby ! {}😅,
+<b>👋 ʜᴇʟʟᴏ ʙᴜᴅᴅʏ! {}🥰,
 
-I'm the one and only fastest URL finder BOT. Add me to any Group and Give me Hunting rights !!
+🤖 ɪ ᴀᴍ ᴀ ꜱɪᴍᴘʟᴇ ʙᴜᴛ ᴘᴏᴡᴇʀꜰᴜʟ ᴀɴᴅ ᴀᴅᴠᴀɴᴄᴇᴅ ʟɪɴᴋ ꜱᴇᴀʀᴄʜ ʙᴏᴛ.  
+ʏᴏᴜ ᴄᴀɴ ᴄᴀʟʟ ᴍᴇ ᴀ ᴘᴏᴡᴇʀꜰᴜʟ ᴀᴜᴛᴏꜰɪʟᴛᴇʀ, ʟɪɴᴋ ꜱᴇᴀʀᴄʜ, ᴏʀ ᴜʀʟ ꜱᴇᴀʀᴄʜ ʙᴏᴛ—ᴡʜɪᴄʜᴇᴠᴇʀ ʏᴏᴜ ᴘʀᴇꜰᴇʀ!  
 
-I will be only yours if you will restrict adding me to other groups.
-Go to @BotFather to change settings.
+📌 ʏᴏᴜ ᴄᴀɴ ᴜꜱᴇ ᴍᴇ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ, ɪ ᴡɪʟʟ ɢɪᴠᴇ ᴍᴏᴠɪᴇꜱ ᴏʀ ꜱᴇʀɪᴇꜱ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ ᴀɴᴅ ᴘᴍ!!  
 
-Don't be sad ! Your all urls are in safe Hand.
+⚡ ɪᴛ ɪꜱ ᴇᴀꜱʏ ᴛᴏ ᴜꜱᴇ ᴍᴇ, ᴊᴜꜱᴛ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ᴀɴᴅ ᴍᴀᴋᴇ ᴍᴇ ᴀɴ ᴀᴅᴍɪɴ.
 
-»»» <b>Happy Hunting</b> «««
-
-🔺Thank You <a href='https://t.me/LazyDeveloper'>LazyDeveloper</a>🔺 </b>
+<blockquote> 🌿 ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ  <a href='https://t.me/Prime_Botz'>ᴘʀɪᴍᴇ ʙᴏᴛz</a></blockquote>
 """
 
 
     START_MSG = """
-<b>Hello Baby ! {}😅,
+<b>👋 ʜᴇʟʟᴏ ʙᴜᴅᴅʏ! {}🥰,
 
-I'm the one and only fastest URL & post finder BOT. Add me to any Group and Give me Hunting rights !!
+🤖 ɪ ᴀᴍ ᴀ ꜱɪᴍᴘʟᴇ ʙᴜᴛ ᴘᴏᴡᴇʀꜰᴜʟ ᴀɴᴅ ᴀᴅᴠᴀɴᴄᴇᴅ ʟɪɴᴋ ꜱᴇᴀʀᴄʜ ʙᴏᴛ.  
+ʏᴏᴜ ᴄᴀɴ ᴄᴀʟʟ ᴍᴇ ᴀ ᴘᴏᴡᴇʀꜰᴜʟ ᴀᴜᴛᴏꜰɪʟᴛᴇʀ, ʟɪɴᴋ ꜱᴇᴀʀᴄʜ, ᴏʀ ᴜʀʟ ꜱᴇᴀʀᴄʜ ʙᴏᴛ—ᴡʜɪᴄʜᴇᴠᴇʀ ʏᴏᴜ ᴘʀᴇꜰᴇʀ!  
 
-Don't be sad ! Your all urls are in safe Hand.</b>
+📌 ʏᴏᴜ ᴄᴀɴ ᴜꜱᴇ ᴍᴇ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ, ɪ ᴡɪʟʟ ɢɪᴠᴇ ᴍᴏᴠɪᴇꜱ ᴏʀ ꜱᴇʀɪᴇꜱ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ ᴀɴᴅ ᴘᴍ!!  
 
-   »»»» <b>Happy Hunting</b> ««««
+⚡ ɪᴛ ɪꜱ ᴇᴀꜱʏ ᴛᴏ ᴜꜱᴇ ᴍᴇ, ᴊᴜꜱᴛ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ᴀɴᴅ ᴍᴀᴋᴇ ᴍᴇ ᴀɴ ᴀᴅᴍɪɴ.
 
-💸<b>Donate us to Keep service Alive.💸</b>
-»» A small amount of ₹5 - ₹20 - ₹50 - ₹100 will be great help !
-🔺 Thank You 🔺 
+<blockquote> 🌿 ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ  <a href='https://t.me/Prime_Botz'>ᴘʀɪᴍᴇ ʙᴏᴛz</a></blockquote>
 """
 
