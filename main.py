@@ -1,5 +1,6 @@
 from configs import Config
 from pyrogram import Client, filters, idle
+from pyrogram.enums import ParseMode  # Correct way to use ParseMode
 from pyrogram.errors import QueryIdInvalid
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from LazyDeveloper.forcesub import ForceSub
@@ -34,7 +35,7 @@ async def start_handler(bot, message: Message):
             [InlineKeyboardButton("🤒Help", callback_data="Help_msg"),
              InlineKeyboardButton("🦋About", callback_data="About_msg")]
         ]),
-        parse_mode="html"
+        parse_mode=ParseMode.HTML  # Fixed parse mode
     )
 
 # Help Command
@@ -47,7 +48,7 @@ async def help_handler(bot, message: Message):
              InlineKeyboardButton("Support Group", url="https://t.me/LazyPrincessSupport")],
             [InlineKeyboardButton("About", callback_data="About_msg")]
         ]),
-        parse_mode="html"
+        parse_mode=ParseMode.HTML  # Fixed parse mode
     )
 
 # Inline Search
@@ -67,7 +68,6 @@ async def inline_handlers(bot, message: Message):
             answers += f'**▰▱▰▱▰▱▰▱▰▱▰▱▰▱\n📜 𝗙𝗶𝗹𝗲 𝗡𝗮𝗺𝗲: {f_text}\n🔗 𝗟𝗶𝗻𝗸: 👇👇\n {d_link}\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱**\n\n'
 
     if found:
-        # ****
         answers += '''❗️❗️❗️ ɪᴍᴘᴏʀᴛᴀɴᴛ ɴᴏᴛɪᴄᴇ ❗️❗️❗️\n⋆★⋆━━━━━━★━━━━⋆★⋆\nLink will auto-delete in 3 minutes... ⏰ \n⋆★⋆━━━━━━★━━━━⋆★⋆\n
 '''
 
@@ -79,9 +79,9 @@ async def inline_handlers(bot, message: Message):
             [InlineKeyboardButton("🔍 Check on Google", url=google_search_url)],
             [InlineKeyboardButton("📩 Request to Admin", url="https://t.me/Prime_Admin_Support_ProBot")]
         ])
-        msg = await message.reply_text(answers, reply_markup=keyboard, parse_mode="html")
+        msg = await message.reply_text(answers, reply_markup=keyboard, parse_mode=ParseMode.HTML)
     else:
-        msg = await message.reply_text(answers, parse_mode="html")
+        msg = await message.reply_text(answers, parse_mode=ParseMode.HTML)
 
     try:  
         await asyncio.sleep(180)
@@ -103,7 +103,7 @@ async def button(bot, cmd: CallbackQuery):
                 [InlineKeyboardButton("Connect Admin", url="https://t.me/LazyDeveloper"),
                  InlineKeyboardButton("🏠 Home", callback_data="gohome")]
             ]),
-            parse_mode="html"
+            parse_mode=ParseMode.HTML  # Fixed parse mode
         )
     elif "Help_msg" in cb_data:
         await cmd.message.edit(
@@ -115,7 +115,7 @@ async def button(bot, cmd: CallbackQuery):
                 [InlineKeyboardButton("Connect Admin", url="https://t.me/LazyDeveloper"),
                  InlineKeyboardButton("🏠 Home", callback_data="gohome")]
             ]),
-            parse_mode="html"
+            parse_mode=ParseMode.HTML  # Fixed parse mode
         )
     elif "gohome" in cb_data:
         await cmd.message.edit(
@@ -126,7 +126,7 @@ async def button(bot, cmd: CallbackQuery):
                  InlineKeyboardButton("About", callback_data="About_msg")],
                 [InlineKeyboardButton("Support Channel", url="https://t.me/LazyPrincessSupport")]
             ]),
-            parse_mode="html"
+            parse_mode=ParseMode.HTML  # Fixed parse mode
         )
 
 # Start Clients
