@@ -47,9 +47,9 @@ async def help_handler(bot, message: Message):
     await message.reply_text(
         Config.ABOUT_HELP_TEXT.format(message.from_user.mention),
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("Updates", url="https://t.me/LazyDeveloper"),
-             InlineKeyboardButton("Support Group", url="https://t.me/LazyPrincessSupport")],
-            [InlineKeyboardButton("About", callback_data="About_msg")]
+            [InlineKeyboardButton("〄 ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 〄", url="https://t.me/Prime_Botz"),
+             InlineKeyboardButton("✪ ꜱᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ ✪", url="https://t.me/Prime_Botz_support")],
+            [InlineKeyboardButton("〆 ᴀʙᴏᴜᴛ 〆", callback_data="About_msg")]
         ]),
         parse_mode=ParseMode.HTML  # Fixed parse mode
     )
@@ -102,9 +102,9 @@ async def button(bot, cmd: CallbackQuery):
             text=Config.ABOUT_BOT_TEXT,
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("Updates Channel", url="https://t.me/LazyDeveloper")],
-                [InlineKeyboardButton("Connect Admin", url="https://t.me/LazyDeveloper"),
-                 InlineKeyboardButton("🏠 Home", callback_data="gohome")]
+                [InlineKeyboardButton("〄 ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 〄", url="https://t.me/Prime_Botz")],
+                [InlineKeyboardButton("✧ ᴀᴅᴍɪɴ ꜱᴜᴘᴘᴏʀᴛ ✧", url="https://t.me/Prime_Nayem"),
+                 InlineKeyboardButton("🏠 ʜᴏᴍᴇ 🏠", callback_data="gohome")]
             ]),
             parse_mode=ParseMode.HTML  # Fixed parse mode
         )
@@ -113,10 +113,10 @@ async def button(bot, cmd: CallbackQuery):
             text=Config.ABOUT_HELP_TEXT,
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("Help", callback_data="Help_msg"),
-                 InlineKeyboardButton("Updates Channel", url="https://t.me/LazyDeveloper")],
-                [InlineKeyboardButton("Connect Admin", url="https://t.me/LazyDeveloper"),
-                 InlineKeyboardButton("🏠 Home", callback_data="gohome")]
+                [InlineKeyboardButton("✪ ꜱᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ ✪", url="https://t.me/Prime_Botz_support"),
+                 InlineKeyboardButton("〄 ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 〄", url="https://t.me/Prime_Botz")],
+                [InlineKeyboardButton("✧ ᴀᴅᴍɪɴ ꜱᴜᴘᴘᴏʀᴛ ✧", url="https://t.me/Prime_Nayem"),
+                 InlineKeyboardButton("🏠 ʜᴏᴍᴇ 🏠", callback_data="gohome")]
             ]),
             parse_mode=ParseMode.HTML  # Fixed parse mode
         )
