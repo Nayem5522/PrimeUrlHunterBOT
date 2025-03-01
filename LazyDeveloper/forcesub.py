@@ -15,7 +15,7 @@ async def ForceSub(bot: Client, cmd: Message):
             await bot.send_message(
                 chat_id=cmd.from_user.id,
                 text="Hello hunter! I think you are **Banned** from using me.\n"
-                     "Request unban to [LazyDeveloper](https://t.me/mRiderDM).",
+                     "Request unban to [👑 ᴍʀ.ᴘʀɪᴍᴇ 👑](https://t.me/Prime_Nayem).",
                 parse_mode=enums.ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
                 reply_to_message_id=cmd.id
