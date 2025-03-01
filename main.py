@@ -147,38 +147,24 @@ async def button(bot, cmd: CallbackQuery):
             parse_mode=ParseMode.HTML  
         )
 
-# Broadcast Command (BOT_OWNER only)
-@Bot.on_message(filters.user(Config.BOT_OWNER) & filters.command("broadcast_prime"))
-async def broadcast_prime(bot: Client, message: Message):
-    if not message.reply_to_message:
-        return await message.reply_text("**⚠️ দয়া করে কোনো মেসেজ রিপ্লাই করে ব্রডকাস্ট কমান্ড দিন!**")
-    
-    broadcast_msg = message.reply_to_message
-    sent = 0
-    failed = 0
-    all_users = []
+@app.on_message(filters.command("broadcast_prime") & filters.user(OWNER_ID))
+async def broadcast_prime(client, message):
+    if message.reply_to_message:
+        text = message.reply_to_message.text
+    else:
+        text = message.text.split(None, 1)[1] if len(message.text.split()) > 1 else None
 
-    # শুধুমাত্র প্রাইভেট চ্যাট থেকে ইউজার আইডি সংগ্রহ
-    async for dialog in bot.get_dialogs():
-        if dialog.chat.type == "private":
-            all_users.append(dialog.chat.id)
+    if not text:
+        return await message.reply("**❌ দয়া করে একটি বার্তা প্রদান করুন!**")
 
-    # ব্রডকাস্ট প্রক্রিয়া
-    for user_id in all_users:
+    users = get_all_users()  # আপনার ডাটাবেস থেকে ইউজারদের তালিকা সংগ্রহ করুন
+    for user in users:
         try:
-            await bot.copy_message(
-                chat_id=user_id,
-                from_chat_id=broadcast_msg.chat.id,
-                message_id=broadcast_msg.id
-            )
-            sent += 1
-            await asyncio.sleep(0.2)  # Flood limit এড়াতে বিরতি
+            await client.send_message(user, text)
         except Exception:
-            failed += 1  
+            pass  # কিছু ইউজার হয়তো ব্লক করে রাখতে পারে
 
-    await message.reply_text(
-        f"✅ **ব্রডকাস্ট সম্পন্ন ✅**\n\n📤 সফল: {sent} জন\n❌ ব্যর্থ: {failed} জন"
-    )
+    await message.reply("✅ **ব্রডকাস্ট সম্পন্ন হয়েছে!**")
 
 # Start Clients
 Bot.start()
