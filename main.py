@@ -69,30 +69,33 @@ async def inline_handlers(bot, message: Message):
             found = True  
             f_text = msg.text.split("\n", 1)[0]
             d_link = msg.text.split("\n", 2)[-1]
-            answers += f'**▰▱▰▱▰▱▰▱▰▱▰▱▰▱\n📜 𝗙𝗶𝗹𝗲 𝗡𝗮𝗺𝗲: {f_text}\n🔗 𝗟𝗶𝗻𝗸: 👇👇\n {d_link}\n▰▱▰▱▰▱▰▱▰▱▰▱▰▱**\n\n'
+            answers += f'''**▰▱▰▱▰▱▰▱▰▱▰▱▰▱
+📜 𝗙𝗶𝗹𝗲 𝗡𝗮𝗺𝗲: {f_text}
+🔗 𝗟𝗶𝗻𝗸: 👇
+{d_link}
+▰▱▰▱▰▱▰▱▰▱▰▱▰▱**\n\n'''
 
     if found:
-        answers += '''❗️❗️❗️ ɪᴍᴘᴏʀᴛᴀɴᴛ ɴᴏᴛɪᴄᴇ ❗️❗️❗️\n⋆★⋆━━━━━━★━━━━⋆★⋆\nLink will auto-delete in 3 minutes... ⏰ \n⋆★⋆━━━━━━★━━━━⋆★⋆\n
-'''
+        answers += '''❗️❗️❗️ ɪᴍᴘᴏʀᴛᴀɴᴛ ɴᴏᴛɪᴄᴇ ❗️❗️❗️\n⚠️ Link will auto-delete in 3 minutes... ⏰'''
 
-    await message.reply_text(answers)
-    if not found:
+    else:
         google_search_url = f"https://www.google.com/search?q={urllib.parse.quote(message.text)}"
         answers = f"**❌ No results found for ➠ {message.text}\n\n⚡ Try searching with correct spelling or add the release year.\n\n🔍 Check Google for correct spelling 👇**"
         keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton("🔍 Check on Google", url=google_search_url)],
             [InlineKeyboardButton("📩 Request to Admin", url="https://t.me/Prime_Admin_Support_ProBot")]
         ])
-        msg = await message.reply_text(answers, reply_markup=keyboard, parse_mode=ParseMode.HTML)
-    else:
-        msg = await message.reply_text(answers, parse_mode=ParseMode.HTML)
+
+    # একবারই মেসেজ পাঠানো হবে  
+    msg = await message.reply_text(answers, reply_markup=keyboard if not found else None)
 
     try:  
         await asyncio.sleep(180)
-        await message.delete()
         await msg.delete()
+        await message.delete()
     except:  
         print(f"[{Config.BOT_SESSION_NAME}] - Failed to delete message for {message.from_user.first_name}")
+
 
 # Callback Query Handler
 @Bot.on_callback_query()
