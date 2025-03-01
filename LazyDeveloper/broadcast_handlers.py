@@ -17,8 +17,8 @@ from pyrogram.types import Message
 broadcast_ids = {}
 
 # Broadcast Handler
-@Client.on_message(filters.command("broadcast") & filters.private & filters.user(BOT_OWNER))
-async def broadcast_handler(c: Client, m: Message):
+@Bot.on_message(filters.private & filters.command("broadcast"))
+async def broadcast_handler(bot, message: Message):
     if not m.reply_to_message:
         return await m.reply_text("⚠️ Please reply to a message to broadcast.")
 
