@@ -61,7 +61,8 @@ async def ForceSub(bot: Client, cmd: Message):
     "⚠️ ʟᴏᴏᴋs ʟɪᴋᴇ ʏᴏᴜ ᴛʜɪɴᴋ ʏᴏᴜ ᴀʀᴇ ǫᴜɪᴛᴇ sᴍᴀʀᴛ.\n"
     "ᴅᴏɴ'ᴛ ᴛʀʏ ᴛᴏ ᴀᴄᴛ ᴛᴏᴏ ᴄʟᴇᴠᴇʀ ᴡɪᴛʜ ᴍᴇ.😂.\n"
     "»» ғɪʀsᴛ, ᴊᴏɪɴ ᴛʜᴇ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ, ᴛʜᴇɴ ᴄʟɪᴄᴋ ᴛʜᴇ ʀᴇғʀᴇsʜ ʙᴜᴛᴛᴏɴ 🔄 ."
-)
+        )
+        )
 
 await bot.send_message(
     chat_id=cmd.chat.id,
