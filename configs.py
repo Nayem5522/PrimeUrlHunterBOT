@@ -34,9 +34,16 @@ class Config(object):
 👨‍💻 Developer Channel: <a href='https://t.me/LazyDeveloper'>LazyDeveloper</a></b>
 """
 
-    ABOUT_HELP_TEXT = """<b>💋 Developer : <a href='https://t.me/LazyDeveloper'>LazyDeveloper</a>
+    ABOUT_HELP_TEXT = """<b>✅ ɪᴛ'ꜱ ɴᴏᴛ ᴀ ᴅɪꜰꜰɪᴄᴜʟᴛ ᴘʀᴏᴄᴇꜱꜱ, ᴊᴜꜱᴛ ᴛʏᴘᴇ ᴛʜᴇ ᴄᴏʀʀᴇᴄᴛ ɴᴀᴍᴇ ʜᴇʀᴇ ᴀɴᴅ ᴛʜᴇ ᴀᴜᴛᴏᴍᴀᴛɪᴄ ʟɪɴᴋ ᴡɪʟʟ ᴄᴏᴍᴇ.  
 
-If You Want Your Own Bot Like This Then You Can Contact Our Developer.</b>
+🔍 ɪꜰ ʏᴏᴜ ᴅᴏɴ'ᴛ ᴋɴᴏᴡ ᴛʜᴇ ᴄᴏʀʀᴇᴄᴛ ꜱᴘᴇʟʟɪɴɢ, ʏᴏᴜ ᴄᴀɴ ᴄʜᴇᴄᴋ ɪᴛ ꜰʀᴏᴍ ɢᴏᴏɢʟᴇ.  
+
+➕ ɪꜰ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴀᴅᴅ ᴛʜɪꜱ ᴛᴏ ᴀɴʏ ᴏꜰ ʏᴏᴜʀ ɢʀᴏᴜᴘꜱ, ʏᴏᴜ ᴄᴀɴ ᴀᴅᴅ ɪᴛ, ᴀɴᴅ ɪ ᴡɪʟʟ ᴘʀᴏᴠɪᴅᴇ ʏᴏᴜ ᴡɪᴛʜ ʟɪɴᴋꜱ ᴛᴏ ᴀʟʟ ᴛʜᴏꜱᴇ ɢʀᴏᴜᴘꜱ.  
+
+❗ ɪꜰ ʏᴏᴜ ʜᴀᴠᴇ ᴀɴʏ ᴘʀᴏʙʟᴇᴍꜱ, ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ ᴏᴘᴛɪᴏɴꜱ ʙᴇʟᴏᴡ ᴛᴏ ɢᴇᴛ ꜱᴜᴘᴘᴏʀᴛ ꜰʀᴏᴍ ᴜꜱ. ❗
+    
+
+🤖 ɪꜰ ʏᴏᴜ ᴡᴀɴᴛ ʏᴏᴜʀ ᴏᴡɴ ʙᴏᴛ ʟɪᴋᴇ ᴛʜɪꜱ, ᴛʜᴇɴ ʏᴏᴜ ᴄᴀɴ \nᴄᴏɴᴛᴀᴄᴛ ᴏᴜʀ ᴅᴇᴠᴇʟᴏᴘᴇʀ 👉 <a href='https://t.me/prime_Nayem'>ᴍʀ.ᴘʀɪᴍᴇ</a></b>
 """
 
     HOME_TEXT = """
