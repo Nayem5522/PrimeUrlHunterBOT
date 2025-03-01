@@ -11,9 +11,10 @@ class Config(object):
     USER_SESSION_STRING = os.environ.get("USER_SESSION_STRING", "")
     CHANNEL_ID = int(os.environ.get("CHANNEL_ID", -100))
     BOT_USERNAME = os.environ.get("BOT_USERNAME")
-    BOT_OWNER = int(os.environ.get("BOT_OWNER"))
+    BOT_OWNER = int(os.environ.get("BOT_OWNER", "6761157656"))
     DATABASE_URL = os.environ.get("DATABASE_URL")
-    UPDATES_CHANNEL = os.environ.get("UPDATES_CHANNEL", None)
+    UPDATES_CHANNEL = os.environ.get("UPDATES_CHANNEL", "-1002245813234")
+    BROADCAST_AS_COPY = True  # True হলে Copy করবে, False হলে Forward করবে
     ABOUT_BOT_TEXT = """<b><blockquote>⍟───[  <a href='https://t.me/Prime_Botz'>📌 ᴍʏ ᴅᴇᴛᴀɪʟꜱ ʙʏ ᴘʀɪᴍᴇ ʙᴏᴛᴢ 🤖</a ]───⍟</blockquote>
     
 ‣ ᴍʏ ɴᴀᴍᴇ : <a href='https://t.me/Prime_Link_Search_FastBot'>🔍 ᴘʀɪᴍᴇ ʟɪɴᴋ sᴇᴀʀᴄʜ ғᴀsᴛʙᴏᴛ 🚀</a>
