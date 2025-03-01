@@ -27,15 +27,18 @@ User = Client(
 @Bot.on_message(filters.private & filters.command("start"))
 async def start_handler(bot, message: Message):
     await message.reply_photo(
-        "https://telegra.ph/file/2b160d9765fe080c704d2.png",
+        "https://envs.sh/i1Y.jpg",
         caption=Config.START_MSG.format(message.from_user.mention),
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("🔺 Donate us 🔺", url="https://p.paytm.me/xCTH/vo37hii9")],
-            [InlineKeyboardButton("⚡️ LazyDeveloper ⚡️", url="https://t.me/LazyDeveloper")],
-            [InlineKeyboardButton("🤒Help", callback_data="Help_msg"),
-             InlineKeyboardButton("🦋About", callback_data="About_msg")]
+            [InlineKeyboardButton("☆ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ☆", url="https://t.me/Prime_Link_Search_FastBot?startgroup=true")],
+            [InlineKeyboardButton("✪ ꜱᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ ✪", url="https://t.me/Prime_Botz_Support"),
+             InlineKeyboardButton("🎬 ᴍᴏᴠɪᴇꜱ ᴄʜᴀɴɴᴇʟ 🎬", url="https://t.me/Prime_Movies4U")],
+            [InlineKeyboardButton("〄 ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 〄", url="https://t.me/Prime_Botz")],
+            [InlineKeyboardButton("〆 ᴀʙᴏᴜᴛ 〆", callback_data="About_msg"),
+             InlineKeyboardButton("〆 ʜᴇʟᴘ 〆", callback_data="Help_msg")],
+            [InlineKeyboardButton("✧ ᴄʀᴇᴀᴛᴏʀ ✧", url="https://t.me/Prime_Nayem")]
         ]),
-        parse_mode=ParseMode.HTML  # Fixed parse mode
+        parse_mode=ParseMode.HTML  
     )
 
 # Help Command
@@ -122,12 +125,16 @@ async def button(bot, cmd: CallbackQuery):
             text=Config.START_MSG.format(cmd.from_user.mention),
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("Help", callback_data="Help_msg"),
-                 InlineKeyboardButton("About", callback_data="About_msg")],
-                [InlineKeyboardButton("Support Channel", url="https://t.me/LazyPrincessSupport")]
+                [InlineKeyboardButton("☆ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ☆", url="https://t.me/Prime_Link_Search_FastBot?startgroup=true")],
+                [InlineKeyboardButton("✪ ꜱᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ ✪", url="https://t.me/Prime_Botz_Support"),
+                 InlineKeyboardButton("🎬 ᴍᴏᴠɪᴇꜱ ᴄʜᴀɴɴᴇʟ 🎬", url="https://t.me/Prime_Movies4U")],
+                [InlineKeyboardButton("〄 ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 〄", url="https://t.me/Prime_Botz")],
+                [InlineKeyboardButton("〆 ʜᴇʟᴘ 〆", callback_data="Help_msg"),
+                 InlineKeyboardButton("〆 ᴀʙᴏᴜᴛ 〆", callback_data="About_msg")],
+                [InlineKeyboardButton("✧ ᴄʀᴇᴀᴛᴏʀ ✧", url="https://t.me/Prime_Nayem")]
             ]),
-            parse_mode=ParseMode.HTML  # Fixed parse mode
-        )
+            parse_mode=ParseMode.HTML  
+    )
 
 # Start Clients
 Bot.start()
