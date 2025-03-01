@@ -14,9 +14,9 @@ class Config(object):
     BOT_OWNER = int(os.environ.get("BOT_OWNER"))
     DATABASE_URL = os.environ.get("DATABASE_URL")
     UPDATES_CHANNEL = os.environ.get("UPDATES_CHANNEL", None)
-    ABOUT_BOT_TEXT = """<b><blockquote>⍟───[  <a href='https://t.me/Prime_Botz'>MY ᴅᴇᴛᴀɪʟꜱ ʙy ᴘʀɪᴍᴇ ʙᴏᴛz 🔥</a ]───⍟</blockquote>
+    ABOUT_BOT_TEXT = """<b><blockquote>⍟───[  <a href='https://t.me/Prime_Botz'>📌 ᴍʏ ᴅᴇᴛᴀɪʟꜱ ʙʏ ᴘʀɪᴍᴇ ʙᴏᴛᴢ 🤖</a ]───⍟</blockquote>
     
-‣ ᴍʏ ɴᴀᴍᴇ : <a href=https://t.me/Prime_Link_Search_FastBot</a>
+‣ ᴍʏ ɴᴀᴍᴇ : <a href='https://t.me/Prime_Link_Search_FastBot'>🔍 ᴘʀɪᴍᴇ ʟɪɴᴋ sᴇᴀʀᴄʜ ғᴀsᴛʙᴏᴛ 🚀</a>
 ‣ ᴍʏ ʙᴇsᴛ ғʀɪᴇɴᴅ : <a href='tg://settings'>ᴛʜɪs ᴘᴇʀsᴏɴ</a> 
 ‣ ᴅᴇᴠᴇʟᴏᴘᴇʀ : <a href='https://t.me/Prime_Nayem'>ᴍʀ.ᴘʀɪᴍᴇ</a> 
 ‣ ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ : <a href='https://t.me/Prime_Botz'>ᴘʀɪᴍᴇ ʙᴏᴛᴢ</a> 
