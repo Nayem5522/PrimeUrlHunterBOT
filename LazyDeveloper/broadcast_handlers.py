@@ -5,98 +5,109 @@ import random
 import string
 import time
 import traceback
+
 import aiofiles
 import aiofiles.os
-
-from config import Config
+from configs import BOT_OWNER  # Import BOT_OWNER from configs.py
 from database import delete_user, get_all_users, total_users_count
 from pyrogram import Client, filters
-from pyrogram.errors import (
-    FloodWait, InputUserDeactivated, PeerIdInvalid, UserIsBlocked
-)
+from pyrogram.errors import FloodWait, InputUserDeactivated, PeerIdInvalid, UserIsBlocked
 from pyrogram.types import Message
 
 broadcast_ids = {}
 
-@Client.on_message(filters.command("broadcast") & filters.private)
+# Broadcast Handler
+@Client.on_message(filters.command("broadcast") & filters.private & filters.user(BOT_OWNER))
 async def broadcast_handler(c: Client, m: Message):
-    if m.from_user.id != Config.OWNER_ID:
-        return await m.reply_text("❌ **আপনি এডমিন নন!**\n\nএই কমান্ডটি শুধুমাত্র **Owner** ব্যবহার করতে পারবেন।")
-
     if not m.reply_to_message:
-        return await m.reply_text("❌ **Please reply to a message to broadcast.**")
+        return await m.reply_text("⚠️ Please reply to a message to broadcast.")
 
     try:
         await main_broadcast_handler(m)
     except Exception as e:
-        logging.error("Error during broadcast", exc_info=True)
-        await m.reply_text("⚠️ **An error occurred while broadcasting.** Check logs.")
-        
-async def send_msg(user_id, message):
+        logging.error(f"❌ Broadcast failed: {e}", exc_info=True)
+        await m.reply_text("❌ Unable to broadcast! Please check the logs.")
+
+
+async def send_msg(user_id: int, message: Message):
     try:
-        if Config.BROADCAST_AS_COPY:
-            await message.copy(chat_id=user_id)
-        else:
-            await message.forward(chat_id=user_id)
+        await message.copy(chat_id=user_id)  # Always send as copy
         return 200, None
+
     except FloodWait as e:
-        await asyncio.sleep(e.value)  # Wait to avoid flood limit
+        logging.warning(f"⚠️ FloodWait: Waiting for {e.value} seconds...")
+        await asyncio.sleep(e.value)
         return await send_msg(user_id, message)
-    except (InputUserDeactivated, UserIsBlocked, PeerIdInvalid) as e:
-        return 400, f"{user_id} : {str(e)}\n"
+
+    except InputUserDeactivated:
+        return 400, f"{user_id} : ❌ User deactivated\n"
+
+    except UserIsBlocked:
+        return 400, f"{user_id} : 🚫 User blocked the bot\n"
+
+    except PeerIdInvalid:
+        return 400, f"{user_id} : ⚠️ Invalid user ID\n"
+
     except Exception as e:
-        return 500, f"{user_id} : {traceback.format_exc()}\n"
+        return 500, f"{user_id} : ❌ {traceback.format_exc()}\n"
+
 
 async def main_broadcast_handler(m: Message):
     all_users = await get_all_users()
     broadcast_msg = m.reply_to_message
 
-    broadcast_id = ''.join(random.choices(string.ascii_letters, k=3))
-    while broadcast_id in broadcast_ids:
-        broadcast_id = ''.join(random.choices(string.ascii_letters, k=3))
+    broadcast_id = ''.join(random.choices(string.ascii_letters, k=5))
+    total_users = await total_users_count()
+    broadcast_ids[broadcast_id] = {"total": total_users, "done": 0, "success": 0, "failed": 0}
 
-    out = await m.reply_text("🚀 **Broadcasting started...**")
+    out = await m.reply_text("📢 **Broadcast started... Please wait!**")
 
     start_time = time.time()
-    total_users = await total_users_count()
-    done, failed, success = 0, 0, 0
+    failed_users = []
 
-    broadcast_ids[broadcast_id] = {"total": total_users, "current": done, "failed": failed, "success": success}
-
-    async with aiofiles.open('broadcast.txt', 'w') as broadcast_log_file:
+    async with aiofiles.open("broadcast_log.txt", "w") as log_file:
         async for user in all_users:
-            sts, msg = await send_msg(user_id=int(user['user_id']), message=broadcast_msg)
-            if msg:
-                await broadcast_log_file.write(msg)
-            if sts == 200:
-                success += 1
-            else:
-                failed += 1
-                if sts == 400:
-                    await delete_user(user['user_id'])
-            done += 1
-            if broadcast_ids.get(broadcast_id) is None:
-                break
-            broadcast_ids[broadcast_id].update({"current": done, "failed": failed, "success": success})
+            user_id = int(user["user_id"])
+            status, msg = await send_msg(user_id, broadcast_msg)
 
+            if msg:
+                await log_file.write(msg)
+
+            if status == 200:
+                broadcast_ids[broadcast_id]["success"] += 1
+            else:
+                broadcast_ids[broadcast_id]["failed"] += 1
+                failed_users.append(user_id)
+                if status == 400:
+                    await delete_user(user_id)
+
+            broadcast_ids[broadcast_id]["done"] += 1
+
+    # Remove broadcast ID after completion
     broadcast_ids.pop(broadcast_id, None)
+
     completed_in = datetime.timedelta(seconds=int(time.time() - start_time))
-    await asyncio.sleep(3)
     await out.delete()
 
-    report_text = (
-        f"✅ **Broadcast Completed!**\n\n"
-        f"⏳ Time Taken: `{completed_in}`\n"
-        f"👥 Total Users: `{total_users}`\n"
-        f"📩 Processed: `{done}`\n"
-        f"✅ Success: `{success}`\n"
-        f"❌ Failed: `{failed}`"
-    )
-    
-    if failed == 0:
-        await m.reply_text(report_text, quote=True)
+    if not failed_users:
+        await m.reply_text(
+            f"✅ **Broadcast completed successfully!**\n\n"
+            f"⏳ Time taken: `{completed_in}`\n"
+            f"👥 Total users: `{total_users}`\n"
+            f"✔️ Successful: `{broadcast_ids[broadcast_id]['success']}`\n"
+            f"❌ Failed: `{broadcast_ids[broadcast_id]['failed']}`"
+        )
     else:
-        await m.reply_document(document='broadcast.txt', caption=report_text, quote=True)
+        await m.reply_document(
+            document="broadcast_log.txt",
+            caption=(
+                f"✅ **Broadcast completed!**\n\n"
+                f"⏳ Time taken: `{completed_in}`\n"
+                f"👥 Total users: `{total_users}`\n"
+                f"✔️ Successful: `{broadcast_ids[broadcast_id]['success']}`\n"
+                f"❌ Failed: `{broadcast_ids[broadcast_id]['failed']}`"
+            )
+        )
 
-    await aiofiles.os.remove('broadcast.txt')
-    
+    # Delete the log file after sending
+    await aiofiles.os.remove("broadcast_log.txt")
