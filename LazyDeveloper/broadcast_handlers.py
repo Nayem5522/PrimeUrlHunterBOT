@@ -18,18 +18,20 @@ from pyrogram.types import Message
 
 broadcast_ids = {}
 
-@Client.on_message(filters.command("broadcast") & filters.private & filters.user(Config.OWNER_ID))
+@Client.on_message(filters.command("broadcast") & filters.private)
 async def broadcast_handler(c: Client, m: Message):
+    if m.from_user.id != Config.OWNER_ID:
+        return await m.reply_text("❌ **আপনি এডমিন নন!**\n\nএই কমান্ডটি শুধুমাত্র **Owner** ব্যবহার করতে পারবেন।")
+
     if not m.reply_to_message:
-        await m.reply_text("❌ Please reply to a message to broadcast.")
-        return
-    
+        return await m.reply_text("❌ **Please reply to a message to broadcast.**")
+
     try:
         await main_broadcast_handler(m)
     except Exception as e:
         logging.error("Error during broadcast", exc_info=True)
-        await m.reply_text("⚠️ An error occurred while broadcasting. Check logs.")
-
+        await m.reply_text("⚠️ **An error occurred while broadcasting.** Check logs.")
+        
 async def send_msg(user_id, message):
     try:
         if Config.BROADCAST_AS_COPY:
