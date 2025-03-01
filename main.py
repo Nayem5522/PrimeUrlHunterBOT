@@ -4,6 +4,7 @@ from pyrogram.enums import ParseMode  # Correct way to use ParseMode
 from pyrogram.errors import QueryIdInvalid
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from LazyDeveloper.forcesub import ForceSub
+from pyrogram.client import Client as User  # Ensure User is correctly imported
 import asyncio
 import urllib.parse
 
