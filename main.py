@@ -84,6 +84,9 @@ async def inline_handlers(bot, message: Message):
     if not await force_sub(bot, message):
         return
 
+    if not message.text:  
+        return  # Ensure message has text  
+
     if message.text == '/start':
         return  
 
@@ -95,7 +98,7 @@ async def inline_handlers(bot, message: Message):
     found = False  
 
     async for msg in User.search_messages(chat_id=Config.CHANNEL_ID, limit=50, query=message.text):  
-        if msg.text:  
+        if msg.text and "\n" in msg.text:  
             found = True  
             f_text = msg.text.split("\n", 1)[0]  
             d_link = msg.text.split("\n", 2)[-1]  
@@ -127,7 +130,7 @@ async def inline_handlers(bot, message: Message):
         await message.delete()  
     except:
         print(f"[{Config.BOT_SESSION_NAME}] - Failed to delete message for {message.from_user.first_name}")
-        
+
 # Callback Query Handler
 @Bot.on_callback_query()
 async def button(bot, cmd: CallbackQuery):
