@@ -107,7 +107,7 @@ async def inline_handlers(bot, message: Message):
 
     if found:
         answers += '''\n\n\n⋆★⋆━━━━━━★━━━━⋆★⋆\n❗️❗️❗️ ɪᴍᴘᴏʀᴛᴀɴᴛ ɴᴏᴛɪᴄᴇ ❗️❗️❗️\n⚠️ ʟɪɴᴋ ᴡɪʟʟ ᴀᴜᴛᴏ-ᴅᴇʟᴇᴛᴇ ɪɴ 3 ᴍɪɴᴜᴛᴇs... ⏰\n⋆★⋆━━━━━━★━━━━⋆★⋆'''  
-        msg = await message.reply_text(answers, reply_to_message_id=message.message_id)  
+        msg = await message.reply_text(answers, reply_to_message_id=message.id)
     else:
         google_search_url = f"https://www.google.com/search?q={urllib.parse.quote(message.text)}"  
         keyboard = InlineKeyboardMarkup([
@@ -118,7 +118,7 @@ async def inline_handlers(bot, message: Message):
             photo="https://envs.sh/bYa.jpg",
             caption=f"**❌ ɴᴏ ʀᴇꜱᴜʟᴛꜱ ꜰᴏᴜɴᴅ ꜰᴏʀ ➠ {message.text}\n\n⚡ ᴛʀʏ ꜱᴇᴀʀᴄʜɪɴɢ ᴡɪᴛʜ ᴄᴏʀʀᴇᴄᴛ ꜱᴘᴇʟʟɪɴɢ ᴏʀ ᴀᴅᴅ ᴛʜᴇ ʀᴇʟᴇᴀꜱᴇ ʏᴇᴀʀ ꜰᴏʀ ʙᴇᴛᴛᴇʀ ʀᴇꜱᴜʟᴛꜱ .🔍 ᴀɴᴅ ʏᴏᴜ ᴄᴀɴ ᴄʜᴇᴄᴋ ᴛʜᴇ ᴄᴏʀʀᴇᴄᴛ ꜱᴘᴇʟʟɪɴɢ ᴏɴ ɢᴏᴏɢʟᴇ. 👇\n\n📩 ɪꜰ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴍᴀᴋᴇ ᴀ ʀᴇǫᴜᴇꜱᴛ ᴛᴏ ᴛʜᴇ ᴅɪʀᴇᴄᴛ ᴀᴅᴍɪɴ, ʏᴏᴜ ᴄᴀɴ ᴅᴏ ᴛʜᴀᴛ ꜰʀᴏᴍ ʙᴇʟᴏᴡ 👇 ʙᴜᴛᴛᴏɴ.**",
             reply_markup=keyboard,
-            reply_to_message_id=message.message_id
+            reply_to_message_id=message.id
         )  
 
     try:
