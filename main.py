@@ -2,7 +2,7 @@ from configs import Config
 from pyrogram import Client, filters, idle  
 from pyrogram.enums import ParseMode  
 from pyrogram.errors import UserNotParticipant  
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton  
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 import asyncio  
 import urllib.parse  
 
