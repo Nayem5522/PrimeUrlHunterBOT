@@ -15,7 +15,7 @@ from pyrogram.types import Message
 
 broadcast_ids = {}
 
-@Client.on_message(filters.command("broadcast") & filters.user(Config.BOT_OWNER))
+@Client.on_message(filters.command("broadcast") & filters.user(Config.BOT_OWNER_IDS))
 async def broadcast_handler(c: Client, m: Message):
     if not m.reply_to_message:
         return await m.reply_text("**দয়া করে এমন একটি মেসেজ রিপ্লাই করুন যা ব্রডকাস্ট করতে চান!**")
