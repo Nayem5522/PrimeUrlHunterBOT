@@ -91,7 +91,7 @@ async def inline_handlers(bot, message: Message):
     await asyncio.sleep(3)  
     await sticker_msg.delete()  
 
-    answers = f'**📂 🔍 Here is your search 🔎 ➠ {message.text}**\n\n'  
+    answers = f'**📂 🔍 ʜᴇʀᴇ ɪꜱ ʏᴏᴜʀ ꜱᴇᴀʀᴄʜ 🔍 ➠ {message.text}**\n\n'  
     found = False  
 
     async for msg in User.search_messages(chat_id=Config.CHANNEL_ID, limit=50, query=message.text):  
@@ -107,7 +107,7 @@ async def inline_handlers(bot, message: Message):
 
     if found:
         answers += '''\n\n\n⋆★⋆━━━━━━★━━━━⋆★⋆\n❗️❗️❗️ ɪᴍᴘᴏʀᴛᴀɴᴛ ɴᴏᴛɪᴄᴇ ❗️❗️❗️\n⚠️ ʟɪɴᴋ ᴡɪʟʟ ᴀᴜᴛᴏ-ᴅᴇʟᴇᴛᴇ ɪɴ 3 ᴍɪɴᴜᴛᴇs... ⏰\n⋆★⋆━━━━━━★━━━━⋆★⋆'''  
-        msg = await message.reply_text(answers)  
+        msg = await message.reply_text(answers, reply_to_message_id=message.message_id)  
     else:
         google_search_url = f"https://www.google.com/search?q={urllib.parse.quote(message.text)}"  
         keyboard = InlineKeyboardMarkup([
@@ -117,7 +117,8 @@ async def inline_handlers(bot, message: Message):
         msg = await message.reply_photo(
             photo="https://envs.sh/bYa.jpg",
             caption=f"**❌ ɴᴏ ʀᴇꜱᴜʟᴛꜱ ꜰᴏᴜɴᴅ ꜰᴏʀ ➠ {message.text}\n\n⚡ ᴛʀʏ ꜱᴇᴀʀᴄʜɪɴɢ ᴡɪᴛʜ ᴄᴏʀʀᴇᴄᴛ ꜱᴘᴇʟʟɪɴɢ ᴏʀ ᴀᴅᴅ ᴛʜᴇ ʀᴇʟᴇᴀꜱᴇ ʏᴇᴀʀ ꜰᴏʀ ʙᴇᴛᴛᴇʀ ʀᴇꜱᴜʟᴛꜱ .🔍 ᴀɴᴅ ʏᴏᴜ ᴄᴀɴ ᴄʜᴇᴄᴋ ᴛʜᴇ ᴄᴏʀʀᴇᴄᴛ ꜱᴘᴇʟʟɪɴɢ ᴏɴ ɢᴏᴏɢʟᴇ. 👇\n\n📩 ɪꜰ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴍᴀᴋᴇ ᴀ ʀᴇǫᴜᴇꜱᴛ ᴛᴏ ᴛʜᴇ ᴅɪʀᴇᴄᴛ ᴀᴅᴍɪɴ, ʏᴏᴜ ᴄᴀɴ ᴅᴏ ᴛʜᴀᴛ ꜰʀᴏᴍ ʙᴇʟᴏᴡ 👇 ʙᴜᴛᴛᴏɴ.**",
-            reply_markup=keyboard
+            reply_markup=keyboard,
+            reply_to_message_id=message.message_id
         )  
 
     try:
