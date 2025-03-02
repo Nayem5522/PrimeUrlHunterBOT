@@ -1,7 +1,9 @@
 
-
 import os
+import re
+from os import environ
 
+id_pattern = re.compile(r'^.\d+$')
 
 class Config(object):
     API_ID = int(os.environ.get("API_ID", 12345))
@@ -13,8 +15,9 @@ class Config(object):
     BOT_USERNAME = os.environ.get("BOT_USERNAME")
     BOT_OWNER = int(os.environ.get("BOT_OWNER", "6761157656"))
     DATABASE_URL = os.environ.get("DATABASE_URL")
-    UPDATES_CHANNEL = os.environ.get("UPDATES_CHANNEL", "-1002245813234")
-    BROADCAST_AS_COPY = True  # True হলে Copy করবে, False হলে Forward করবে
+    UPDATES_CHANNEL = os.environ.get("UPDATES_CHANNEL", False)
+    AUTH_CHANNEL = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('AUTH_CHANNEL', '-1002245813234').split()] 
+    BROADCAST_AS_COPY = True  
     ABOUT_BOT_TEXT = """<b><blockquote>⍟───[  <a href='https://t.me/Prime_Botz'>📌 ᴍʏ ᴅᴇᴛᴀɪʟꜱ ʙʏ ᴘʀɪᴍᴇ ʙᴏᴛᴢ 🤖</a ]───⍟</blockquote>
     
 ‣ ᴍʏ ɴᴀᴍᴇ : <a href='https://t.me/Prime_Link_Search_FastBot'>🔍 ᴘʀɪᴍᴇ ʟɪɴᴋ sᴇᴀʀᴄʜ ғᴀsᴛʙᴏᴛ 🚀</a>
