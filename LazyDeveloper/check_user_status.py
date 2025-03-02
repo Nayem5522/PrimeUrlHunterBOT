@@ -3,27 +3,40 @@
 
 import datetime
 from configs import Config
-from handlers.database import Database
-
-db = Database(Config.DATABASE_URL, Config.BOT_USERNAME)
+from handlers.database import db
+from pyrogram.errors import FloodWait
+import asyncio
 
 
 async def handle_user_status(bot, cmd):
-    chat_id = cmd.from_user.id
-    if not await db.is_user_exist(chat_id):
-        await db.add_user(chat_id)
-        await bot.send_message(
-            Config.LOG_CHANNEL,
-            f"#NEW_USER: \n\nNew User [{cmd.from_user.first_name}](tg://user?id={cmd.from_user.id}) started @{Config.BOT_USERNAME} !!"
-        )
+    user_id = cmd.from_user.id
 
-    ban_status = await db.get_ban_status(chat_id)
-    if ban_status["is_banned"]:
-        if (
-                datetime.date.today() - datetime.date.fromisoformat(ban_status["banned_on"])
-        ).days > ban_status["ban_duration"]:
-            await db.remove_ban(chat_id)
+    # নতুন ইউজার হলে ডাটাবেজে যোগ করো
+    if not await db.is_user_exist(user_id):
+        await db.add_user(user_id)
+        if Config.LOG_CHANNEL:
+            try:
+                await bot.send_message(
+                    Config.LOG_CHANNEL,
+                    f"#NEW_USER: \n\nNew User [{cmd.from_user.first_name}](tg://user?id={user_id}) started @{Config.BOT_USERNAME} !!"
+                )
+            except FloodWait as e:
+                await asyncio.sleep(e.value)
+            except Exception as err:
+                print(f"LOG_CHANNEL Error: {err}")
+
+    # ব্যান স্ট্যাটাস চেক করা হচ্ছে
+    ban_status = await db.get_ban_status(user_id)
+    
+    if ban_status.get("is_banned", False):
+        banned_on = datetime.date.fromisoformat(ban_status.get("banned_on", "9999-12-31"))
+        ban_duration = ban_status.get("ban_duration", 0)
+        days_banned = (datetime.date.today() - banned_on).days
+
+        if days_banned > ban_duration:
+            await db.remove_ban(user_id)
         else:
-            await cmd.reply_text("Hello hunter ! I think you are Banned to use me.", quote=True)
+            await cmd.reply_text("🚫 আপনি ব্যান আছেন! দয়া করে এডমিনের সাথে যোগাযোগ করুন।", quote=True)
             return
+
     await cmd.continue_propagation()
