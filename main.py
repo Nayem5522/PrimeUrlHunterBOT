@@ -32,8 +32,8 @@ async def force_sub(bot, message):
     btn = await is_subscribed(bot, message.from_user.id)
     if btn:
         await message.reply_photo(
-            photo="https://envs.sh/KgA.jpg",  # Change this if needed
-            caption="👋 Hello {message.from_user.mention},\n\n"
+            photo="https://envs.sh/ifc.jpg",  # Change this if needed
+            caption="👋 Hello Buddy 👋,\n\n"
                     "You must join our updates channel before using the bot. "
                     "Click the 'Join Updates Channel' button below and then press 'Try Again'.",
             reply_markup=InlineKeyboardMarkup(btn + [[InlineKeyboardButton("♻️ Try Again ♻️", url=f"https://t.me/{(await bot.get_me()).username}?start=true")]])
