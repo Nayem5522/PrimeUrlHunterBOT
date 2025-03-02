@@ -1,10 +1,7 @@
 from configs import Config  
 from pyrogram import Client, filters, idle  
 from pyrogram.enums import ParseMode  
-from pyrogram.errors import QueryIdInvalid  
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery  
-from LazyDeveloper.forcesub import ForceSub  
-from pyrogram.client import Client as User  
 import asyncio  
 import urllib.parse  
 
@@ -24,7 +21,7 @@ async def start_handler(bot, message: Message):
         "https://envs.sh/i1Y.jpg",
         caption=Config.START_MSG.format(message.from_user.mention),
         reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("☆ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ☆", url="https://t.me/Prime_Link_Search_FastBot?startgroup=true")],
+            [InlineKeyboardButton("☆ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ☆", url=f"https://t.me/{bot.me.username}?startgroup=true")],
             [InlineKeyboardButton("✪ ꜱᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ ✪", url="https://t.me/Prime_Botz_Support"),
              InlineKeyboardButton("🎬 ᴍᴏᴠɪᴇꜱ ᴄʜᴀɴɴᴇʟ 🎬", url="https://t.me/Prime_Movies4U")],
             [InlineKeyboardButton("〄 ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 〄", url="https://t.me/Prime_Botz")],
@@ -48,9 +45,10 @@ async def help_handler(bot, message: Message):
         parse_mode=ParseMode.HTML
     )  
 
-@Bot.on_message(filters.incoming & ~filters.channel)
+@Bot.on_message(filters.text & filters.private)
 async def inline_handlers(bot, message: Message):
-    if message.text == '/start': return  
+    if message.text.startswith("/"):  
+        return  
 
     sticker_msg = await message.reply_sticker(PRIME_BOTZ_STIK)  
     await asyncio.sleep(3)  
@@ -71,7 +69,6 @@ async def inline_handlers(bot, message: Message):
 ▰▱▰▱▰▱▰▱▰▱▰▱▰▱**\n\n'''  
 
     if found:
-        answers += '''\n\n\n⋆★⋆━━━━━━★━━━━⋆★⋆\n❗️❗️❗️ ɪᴍᴘᴏʀᴛᴀɴᴛ ɴᴏᴛɪᴄᴇ ❗️❗️❗️\n⚠️ Link will auto-delete in 3 minutes... ⏰\n⋆★⋆━━━━━━★━━━━⋆★⋆'''  
         msg = await message.reply_text(answers)  
     else:
         google_search_url = f"https://www.google.com/search?q={urllib.parse.quote(message.text)}"  
@@ -90,26 +87,26 @@ async def inline_handlers(bot, message: Message):
         await msg.delete()  
         await message.delete()  
     except:
-        print(f"[{Config.BOT_SESSION_NAME}] - Failed to delete message for {message.from_user.first_name}")  
+        pass  
 
 # Callback Query Handler
 @Bot.on_callback_query()
 async def button(bot, cmd: CallbackQuery):
     cb_data = cmd.data  
     if "About_msg" in cb_data:
-        await cmd.message.edit(
+        await cmd.message.edit_text(
             text=Config.ABOUT_BOT_TEXT,
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton("〄 ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 〄", url="https://t.me/Prime_Botz")],
-                [InlineKeyboardButton("✧ ᴀᴅᴍɪɴ ꜱᴜᴘᴘᴏʀᴛ ✧", url="https://t.me/Prime_Nayem"),
+                [InlineKeyboardButton("✧ ᴄʀᴇᴀᴛᴏʀ ✧", url="https://t.me/Prime_Nayem"),
                  InlineKeyboardButton("🏠 ʜᴏᴍᴇ 🏠", callback_data="gohome")]
             ]),
             parse_mode=ParseMode.HTML
         )  
 
     elif "Help_msg" in cb_data:
-        await cmd.message.edit(
+        await cmd.message.edit_text(
             text=Config.ABOUT_HELP_TEXT,
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup([
@@ -120,21 +117,8 @@ async def button(bot, cmd: CallbackQuery):
             parse_mode=ParseMode.HTML
         )  
 
-    elif "gohome" in cb_data:  # এখানে ইন্ডেন্ট ঠিক করা হয়েছে
-        await cmd.message.edit(
-            text=Config.START_MSG.format(cmd.from_user.mention),
-            disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("☆ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ ☆", url="https://t.me/Prime_Link_Search_FastBot?startgroup=true")],
-                [InlineKeyboardButton("✪ ꜱᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ ✪", url="https://t.me/Prime_Botz_Support"),
-                 InlineKeyboardButton("🎬 ᴍᴏᴠɪᴇꜱ ᴄʜᴀɴɴᴇʟ 🎬", url="https://t.me/Prime_Movies4U")],
-                [InlineKeyboardButton("〄 ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ 〄", url="https://t.me/Prime_Botz")],
-                [InlineKeyboardButton("〆 ʜᴇʟᴘ 〆", callback_data="Help_msg"),
-                 InlineKeyboardButton("〆 ᴀʙᴏᴜᴛ 〆", callback_data="About_msg")],
-                [InlineKeyboardButton("✧ ᴄʀᴇᴀᴛᴏʀ ✧", url="https://t.me/Prime_Nayem")]
-            ]),
-            parse_mode=ParseMode.HTML
-        )
+    elif "gohome" in cb_data:
+        await start_handler(bot, cmd.message)
 
 # Start Clients
 Bot.start()  
