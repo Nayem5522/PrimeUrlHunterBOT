@@ -1,95 +1,79 @@
-# in & as LazyDeveloper
-# Please Don't Remove Credit
-
 import asyncio
 import datetime
-import logging
 import random
 import string
 import time
 import traceback
 import aiofiles
 import aiofiles.os
-
-from config import BOT_OWNER  # Ensure BOT_OWNER is defined in config
-from database import delete_user, get_all_users, total_users_count
+import logging
+from configs import Config
+from database import db
 from pyrogram import Client, filters
-from pyrogram.errors import (FloodWait, InputUserDeactivated, PeerIdInvalid,
-                             UserIsBlocked)
+from pyrogram.errors import FloodWait, InputUserDeactivated, PeerIdInvalid, UserIsBlocked
 from pyrogram.types import Message
 
 broadcast_ids = {}
 
-@Client.on_message(filters.command("broadcast") & filters.private & filters.user(BOT_OWNER) & filters.reply)
+
+@Client.on_message(filters.command("broadcast") & filters.user(Config.BOT_OWNER))
 async def broadcast_handler(c: Client, m: Message):
-    try:
-        await main_broadcast_handler(m)
-    except Exception as e:
-        logging.error("Something went wrong. Unable to broadcast!", exc_info=True)
-        await m.reply_text("❌ ব্রডকাস্ট করতে সমস্যা হয়েছে! লগ চেক করুন।")
+    if not m.reply_to_message:
+        return await m.reply_text("**দয়া করে এমন একটি মেসেজ রিপ্লাই করুন যা ব্রডকাস্ট করতে চান!**")
+
+    broadcast_msg = m.reply_to_message
+
+    broadcast_id = ''.join(random.choices(string.ascii_letters, k=3))
+    broadcast_ids[broadcast_id] = {
+        "total": await db.total_users_count(),
+        "success": 0,
+        "failed": 0,
+        "current": 0
+    }
+
+    msg = await m.reply_text(f"📡 **ব্রডকাস্ট শুরু হচ্ছে...**\n\n👥 মোট ইউজার: {broadcast_ids[broadcast_id]['total']} জন")
+
+    start_time = time.time()
+    log_file = "broadcast_failed_users.txt"
+    async with aiofiles.open(log_file, "w") as log:
+        for user_id in await db.get_all_users():
+            status, error = await send_msg(user_id, broadcast_msg)
+            if error:
+                await log.write(error)
+            if status == 200:
+                broadcast_ids[broadcast_id]["success"] += 1
+            else:
+                broadcast_ids[broadcast_id]["failed"] += 1
+                if status == 400:
+                    await db.delete_user(user_id)
+            broadcast_ids[broadcast_id]["current"] += 1
+
+    elapsed_time = str(datetime.timedelta(seconds=int(time.time() - start_time)))
+    await msg.delete()
+
+    if broadcast_ids[broadcast_id]["failed"] == 0:
+        await m.reply_text(
+            f"✅ **ব্রডকাস্ট সম্পন্ন হয়েছে!**\n\n⏳ সময়: `{elapsed_time}`\n👥 মোট ইউজার: `{broadcast_ids[broadcast_id]['total']}`\n✅ সফল: `{broadcast_ids[broadcast_id]['success']}`\n❌ ব্যর্থ: `{broadcast_ids[broadcast_id]['failed']}`"
+        )
+    else:
+        await m.reply_document(
+            document=log_file,
+            caption=f"❗ **ব্রডকাস্ট আংশিক সফল হয়েছে!**\n\n⏳ সময়: `{elapsed_time}`\n👥 মোট ইউজার: `{broadcast_ids[broadcast_id]['total']}`\n✅ সফল: `{broadcast_ids[broadcast_id]['success']}`\n❌ ব্যর্থ: `{broadcast_ids[broadcast_id]['failed']}`"
+        )
+        await aiofiles.os.remove(log_file)
+
 
 async def send_msg(user_id, message):
     try:
-        if Config.BROADCAST_AS_COPY:  # Use Config for better settings management
+        if Config.BROADCAST_AS_COPY:
             await message.copy(chat_id=user_id)
         else:
             await message.forward(chat_id=user_id)
         return 200, None
     except FloodWait as e:
-        await asyncio.sleep(e.x)
-        return send_msg(user_id, message)
-    except InputUserDeactivated:
-        return 400, f"{user_id} : ❌ Account Deactivated\n"
-    except UserIsBlocked:
-        return 400, f"{user_id} : ❌ Blocked the Bot\n"
-    except PeerIdInvalid:
-        return 400, f"{user_id} : ❌ Invalid User ID\n"
+        await asyncio.sleep(e.value)
+        return await send_msg(user_id, message)
+    except (InputUserDeactivated, UserIsBlocked, PeerIdInvalid) as e:
+        return 400, f"{user_id} : {str(e)}\n"
     except Exception as e:
         return 500, f"{user_id} : {traceback.format_exc()}\n"
-
-async def main_broadcast_handler(m: Message):
-    all_users = await get_all_users()
-    broadcast_msg = m.reply_to_message
-
-    # Unique broadcast ID
-    while True:
-        broadcast_id = ''.join([random.choice(string.ascii_letters) for _ in range(3)])
-        if not broadcast_ids.get(broadcast_id):
-            break
-
-    out = await m.reply_text("🔄 **ব্রডকাস্ট শুরু হয়েছে...**")
-    start_time = time.time()
-    total_users = await total_users_count()
-    done, failed, success = 0, 0, 0
-    broadcast_ids[broadcast_id] = dict(total=total_users, current=done, failed=failed, success=success)
-
-    async with aiofiles.open('broadcast_log.txt', 'w') as broadcast_log_file:
-        async for user in all_users:
-            sts, msg = await send_msg(user_id=int(user['user_id']), message=broadcast_msg)
-            if msg is not None:
-                await broadcast_log_file.write(msg)
-            if sts == 200:
-                success += 1
-            else:
-                failed += 1
-            if sts == 400:
-                await delete_user(user['user_id'])
-            done += 1
-            if broadcast_ids.get(broadcast_id) is None:
-                break
-            else:
-                broadcast_ids[broadcast_id].update(dict(current=done, failed=failed, success=success))
-
-    if broadcast_ids.get(broadcast_id):
-        broadcast_ids.pop(broadcast_id)
-    completed_in = datetime.timedelta(seconds=int(time.time() - start_time))
-    
-    await asyncio.sleep(3)
-    await out.delete()
-    
-    if failed == 0:
-        await m.reply_text(f"✅ **ব্রডকাস্ট সম্পন্ন হয়েছে!**\n\n⏳ সময় লেগেছে: `{completed_in}`\n👥 মোট ইউজার: `{total_users}`\n📤 সফল: `{success}`\n❌ ব্যর্থ: `{failed}`")
-    else:
-        await m.reply_document(document='broadcast_log.txt', caption=f"✅ **ব্রডকাস্ট সম্পন্ন হয়েছে!**\n\n⏳ সময় লেগেছে: `{completed_in}`\n👥 মোট ইউজার: `{total_users}`\n📤 সফল: `{success}`\n❌ ব্যর্থ: `{failed}`")
-    
-    await aiofiles.os.remove('broadcast_log.txt')
