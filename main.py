@@ -87,7 +87,7 @@ async def inline_handlers(bot, message: Message):
     if message.text == '/start':
         return  
 
-    sticker_msg = await message.reply_sticker("CAACAgUAAxkBAAIojGfEhpbbnjm9DDhCsYfT3ICbDQb5AAJMFgACJdWRVLSFBTAsBpJ5HgQ")  
+    sticker_msg = await message.reply_sticker("CAACAgUAAxkBAAIokWfElSr3UnEM3F6h-VYVOo9ye53fAAKJGAACAhAgVte0gD_wIF62HgQ")  
     await asyncio.sleep(3)  
     await sticker_msg.delete()  
 
@@ -100,23 +100,23 @@ async def inline_handlers(bot, message: Message):
             f_text = msg.text.split("\n", 1)[0]  
             d_link = msg.text.split("\n", 2)[-1]  
             answers += f'''**▰▱▰▱▰▱▰▱▰▱▰▱▰▱  
-📜 File Name: {f_text}  
+📜 File Name: {f_text}\n  
 🔗 Link: 👇  
 {d_link}  
 ▰▱▰▱▰▱▰▱▰▱▰▱▰▱**\n\n'''  
 
     if found:
-        answers += '''\n\n\n⋆★⋆━━━━━━★━━━━⋆★⋆\n❗️❗️❗️ Important Notice ❗️❗️❗️\n⚠️ Link will auto-delete in 3 minutes... ⏰\n⋆★⋆━━━━━━★━━━━⋆★⋆'''  
+        answers += '''\n\n\n⋆★⋆━━━━━━★━━━━⋆★⋆\n❗️❗️❗️ ɪᴍᴘᴏʀᴛᴀɴᴛ ɴᴏᴛɪᴄᴇ ❗️❗️❗️\n⚠️ ʟɪɴᴋ ᴡɪʟʟ ᴀᴜᴛᴏ-ᴅᴇʟᴇᴛᴇ ɪɴ 3 ᴍɪɴᴜᴛᴇs... ⏰\n⋆★⋆━━━━━━★━━━━⋆★⋆'''  
         msg = await message.reply_text(answers)  
     else:
         google_search_url = f"https://www.google.com/search?q={urllib.parse.quote(message.text)}"  
         keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("🔍 Check on Google", url=google_search_url)],
-            [InlineKeyboardButton("📩 Request to Admin", url="https://t.me/Prime_Admin_Support_ProBot")]
+            [InlineKeyboardButton("🔍 ᴄʜᴇᴄᴋ ᴛʜᴇ ᴄᴏʀʀᴇᴄᴛ ꜱᴘᴇʟʟɪɴɢ ᴏɴ ɢᴏᴏɢʟᴇ 🔍", url=google_search_url)],
+            [InlineKeyboardButton("📩 ʀᴇǫᴜᴇꜱᴛ ᴅɪʀᴇᴄᴛʟʏ ᴛᴏ ᴛʜᴇ ᴀᴅᴍɪɴ 📩", url="https://t.me/Prime_Admin_Support_ProBot")]
         ])  
         msg = await message.reply_photo(
-            photo="https://envs.sh/iJJ.jpg",
-            caption=f"**❌ No results found for ➠ {message.text}\n\n⚡ Try searching with correct spelling or add the release year.**",
+            photo="https://envs.sh/bYa.jpg",
+            caption=f"**❌ ɴᴏ ʀᴇꜱᴜʟᴛꜱ ꜰᴏᴜɴᴅ ꜰᴏʀ ➠ {message.text}\n\n⚡ ᴛʀʏ ꜱᴇᴀʀᴄʜɪɴɢ ᴡɪᴛʜ ᴄᴏʀʀᴇᴄᴛ ꜱᴘᴇʟʟɪɴɢ ᴏʀ ᴀᴅᴅ ᴛʜᴇ ʀᴇʟᴇᴀꜱᴇ ʏᴇᴀʀ ꜰᴏʀ ʙᴇᴛᴛᴇʀ ʀᴇꜱᴜʟᴛꜱ .🔍 ᴀɴᴅ ʏᴏᴜ ᴄᴀɴ ᴄʜᴇᴄᴋ ᴛʜᴇ ᴄᴏʀʀᴇᴄᴛ ꜱᴘᴇʟʟɪɴɢ ᴏɴ ɢᴏᴏɢʟᴇ. 👇\n\n📩 ɪꜰ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴍᴀᴋᴇ ᴀ ʀᴇǫᴜᴇꜱᴛ ᴛᴏ ᴛʜᴇ ᴅɪʀᴇᴄᴛ ᴀᴅᴍɪɴ, ʏᴏᴜ ᴄᴀɴ ᴅᴏ ᴛʜᴀᴛ ꜰʀᴏᴍ ʙᴇʟᴏᴡ 👇 ʙᴜᴛᴛᴏɴ.**",
             reply_markup=keyboard
         )  
 
