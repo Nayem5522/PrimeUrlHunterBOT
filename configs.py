@@ -13,7 +13,6 @@ class Config(object):
     BOT_USERNAME = os.environ.get("BOT_USERNAME")
     BOT_OWNER = int(os.environ.get("BOT_OWNER", "6761157656"))
     DATABASE_URL = os.environ.get("DATABASE_URL")
-    BOT_OWNER_IDS = int(os.environ.get("BOT_OWNER_IDS", "7057105056"))
     UPDATES_CHANNEL = os.environ.get("UPDATES_CHANNEL", "-1002245813234")
     BROADCAST_AS_COPY = True  # True হলে Copy করবে, False হলে Forward করবে
     ABOUT_BOT_TEXT = """<b><blockquote>⍟───[  <a href='https://t.me/Prime_Botz'>📌 ᴍʏ ᴅᴇᴛᴀɪʟꜱ ʙʏ ᴘʀɪᴍᴇ ʙᴏᴛᴢ 🤖</a ]───⍟</blockquote>
