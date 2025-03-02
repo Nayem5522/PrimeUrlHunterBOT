@@ -9,6 +9,8 @@ from pyrogram.client import Client as User
 import asyncio  
 import urllib.parse  
 
+AUTH_CHANNEL = Config.AUTH_CHANNEL
+
 # Bot Client
 Bot = Client("PrimeBotz", api_id=Config.API_ID, api_hash=Config.API_HASH, bot_token=Config.BOT_TOKEN)  
 
