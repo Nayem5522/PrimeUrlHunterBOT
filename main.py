@@ -3,6 +3,7 @@ from pyrogram import Client, filters, idle
 from pyrogram.enums import ParseMode  
 from pyrogram.errors import QueryIdInvalid  
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery  
+from pyrogram.errors import *
 from LazyDeveloper.forcesub import ForceSub  
 from pyrogram.client import Client as User  
 import asyncio  
@@ -14,12 +15,48 @@ Bot = Client("PrimeBotz", api_id=Config.API_ID, api_hash=Config.API_HASH, bot_to
 # User Client
 User = Client("UserSession", api_id=Config.API_ID, api_hash=Config.API_HASH, session_string=Config.USER_SESSION_STRING)  
 
-PRIME_BOTZ_STIK = "CAACAgUAAxkBAAI9pmfCrCQ2pNi_3CtnMCUPrty_RQ82AAJIFwAC1BkYVqY09g5jKSm5HgQ"  
+async def is_subscribed(bot, query, channel):
+    btn = []
+    for id in channel:
+        chat = await bot.get_chat(int(id))
+        try:
+            await bot.get_chat_member(id, query.from_user.id)
+        except UserNotParticipant:
+            btn.append([InlineKeyboardButton(f"✇ ᴊᴏɪɴ ᴏᴜʀ ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ ✇", url=chat.invite_link)]) 
+        except Exception as e:
+            pass
+    return btn
+
+PRIME_BOTZ_STIK = "CAACAgUAAxkBAAIojGfEhpbbnjm9DDhCsYfT3ICbDQb5AAJMFgACJdWRVLSFBTAsBpJ5HgQ"  
 PRIME_BOTZ_NO = "https://envs.sh/iJJ.jpg"  
 
 # Start Command
 @Bot.on_message(filters.private & filters.command("start"))
 async def start_handler(bot, message: Message):
+    client = bot
+    if AUTH_CHANNEL:
+        try:
+            btn = await is_subscribed(client, message, AUTH_CHANNEL)
+            if btn:
+                username = (await client.get_me()).username
+                if len(message.command) > 1:
+                    btn.append([InlineKeyboardButton("♻️ Try Again ♻️", url=f"https://t.me/{username}?start={message.command[1]}")])
+                else:
+                    btn.append([InlineKeyboardButton("♻️ Try Again ♻️", url=f"https://t.me/{username}?start=true")])
+
+                await message.reply_photo(
+                    photo="https://envs.sh/KgA.jpg",  # Replace with your image link
+                    caption=(
+                        "<b>👋 Hello {message.from_user.mention},\n\n"
+                        "ɪꜰ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴜꜱᴇ ᴍᴇ, ʏᴏᴜ ᴍᴜꜱᴛ ꜰɪʀꜱᴛ ᴊᴏɪɴ ᴏᴜʀ ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ. "
+                        "ᴄʟɪᴄᴋ ᴏɴ \"✇ ᴊᴏɪɴ ᴏᴜʀ ᴜᴘᴅᴀᴛᴇꜱ ᴄʜᴀɴɴᴇʟ ✇\" ʙᴜᴛᴛᴏɴ.ᴛʜᴇɴ ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ \"ʀᴇǫᴜᴇꜱᴛ ᴛᴏ ᴊᴏɪɴ\" ʙᴜᴛᴛᴏɴ. "
+                        "ᴀꜰᴛᴇʀ ᴊᴏɪɴɪɴɢ, ᴄʟɪᴄᴋ ᴏɴ \"ᴛʀʏ ᴀɢᴀɪɴ\" ʙᴜᴛᴛᴏɴ.</b>"
+                    ),
+                    reply_markup=InlineKeyboardMarkup(btn)
+                )
+                return
+        except Exception as e:
+            print(e)
     await message.reply_photo(
         "https://envs.sh/i1Y.jpg",
         caption=Config.START_MSG.format(message.from_user.mention),
